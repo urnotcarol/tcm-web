@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>中医诊疗辅助系统</title>
+  <meta name="viewpoint" content="width=device-width, initial-scale=1.0">
+  <link href="flat-ui/dist/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="flat-ui/dist/css/flat-ui.css" rel="stylesheet">
+</head>
+<body>
+  <style>
+  body {
+    padding-bottom: 200px;
+  }
+
+  .navbar-static-top {
+    margin-bottom: 19px;
+  }
+  </style>
+
+  <div class="navbar navbar-default navbar-static-top" role="navigation">     <!-- 登录后的导航栏 -->
+    <div class="container">
+      <div class="navbar-header">      <!-- 导航栏的标题 -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">  <!-- 为了添加响应式特性 -->
+          <span class="sr-only">Toggle navigation</span>  <!-- .sr-only 用于屏幕阅读器，帮助残障人士更好的访问网站。 -->
+        </button>
+        <a class="navbar-brand">中医诊疗辅助系统</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li id="nav-diagnose"><a href="diagnose">诊断</a></li>
+          <li id="nav-instance" class="active"><a href="">病例</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+
+</body>
+</html>

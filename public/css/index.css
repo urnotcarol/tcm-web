@@ -1,0 +1,11 @@
+body {
+  padding-bottom: 200px;    /*设置元素的下内边距*/
+}
+
+.navbar-static-top {
+  margin-bottom: 19px;    /*设置元素的下外边距*/
+}
+
+.jumbotron {
+  background-color: #ECF0F1;
+}

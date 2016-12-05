@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>中医诊疗辅助系统</title>
+  <meta name="viewpoint" content="width=device-width, initial-scale=1.0">
+  <link href="flat-ui/dist/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="flat-ui/dist/css/flat-ui.css" rel="stylesheet">
+  <link href="css/diagnose.css" rel="stylesheet">
+</head>
+<body>
+  <div class="navbar navbar-default navbar-static-top" role="navigation">     <!-- 登录后的导航栏 -->
+    <div class="container">
+      <div class="navbar-header">      <!-- 导航栏的标题 -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">  <!-- 为了添加响应式特性 -->
+          <span class="sr-only">Toggle navigation</span>  <!-- .sr-only 用于屏幕阅读器，帮助残障人士更好的访问网站。 -->
+        </button>
+        <a class="navbar-brand">中医诊疗辅助系统</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li id="nav-diagnose" class="active"><a href="">诊断</a></li>
+          <li id="nav-instance"><a href="instance">病例</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">用户管理 <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">修改密码</a></li>
+              <li><a href="#">修改资料</a></li>
+              <li><a href="#">用户升级</a></li>
+              <li><a href="#">退出</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <div class="jumbotron">
+          <div class="row">
+            <div class="col-md-12" id="symptoms">
+              <h4 class="headline-symptom">选择症状</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="jumbotron">
+          <div class="row">
+            <div class="col-md-12">
+              <h4 class="headline-selected">已选症状</h4>
+              <div class="tagsinput-primary">  <!-- 显示结果 -->
+                <input id="tags-selected" type="text" class="tagsinput input-lg" value="">
+              </div>
+              <div>
+                <button type="submit" id="submit-selected" class="btn btn-primary btn-block">诊断</button>
+              </div>
+              <div>
+                <button type="submit" id="submit-reset" class="btn btn-warning btn-block">重置</button>
+              </div>
+              <div id="div-result" style="display:none;">
+                <h4 class="headline-result">诊断结果</h4>
+                <blockquote>
+                  <p id="text-result">
+                    太阳病桂枝证，医反下之，利遂不止，脉促者，热未解也；喘而汗出者，葛根黄连黄芩甘草汤主之。
+                  </p>
+                </blockquote>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script src="/jquery/dist/jquery.js"></script>
+  <script src="/flat-ui/dist/js/vendor/jquery.min.js"></script>
+  <script src="/typeahead.js/dist/typeahead.bundle.js"></script>
+  <script src="/flat-ui/dist/js/flat-ui.min.js"></script>
+  <script src="flat-ui/docs/assets/js/application.js"></script>
+  <script src="/typeahead.js/dist/bloodhound.js"></script>
+  <script src="/diagnose.js"></script>
+</body>
+</html>

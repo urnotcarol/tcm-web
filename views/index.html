@@ -1,25 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
+<hml lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>中医诊疗辅助系统 - 用户登录</title>
+  <title>中医诊疗辅助系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="flat-ui/dist/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="flat-ui/dist/css/flat-ui.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-  <form>
-    <p>
-      <label id="inputHint"></label>
-    </p>
-    <p>
-      <input type="text" id="userid" placeholder="userid" />
-    </p>
-    <p>
-      <input type="password" id="password" placeholder="password" />
-    </p>
-    <p>
-      <input type="submit" id="login" value="Login">
-    </p>
-  </form>
+  <div class="navbar navbar-default navbar-static-top" role="navigation">     <!-- 登录注册的导航栏 -->
+    <div class="container">
+      <div class="navbar-header">      <!-- 导航栏的标题 -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">  <!-- 为了添加响应式特性 -->
+          <span class="sr-only">Toggle navigation</span>  <!-- .sr-only 用于屏幕阅读器，帮助残障人士更好的访问网站。 -->
+        </button>
+        <a class="navbar-brand">中医诊疗辅助系统</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li id="nav-login" class="active"><a href="#login">登录</a></li>
+          <li id="nav-logup"><a href="#logup">注册</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="jumbotron"  id="div-login">  <!-- 获得带圆角的超大屏幕 -->
+      <div class="row">
+        <div class="col-md-12">
+          <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <label for="login-id" class="col-lg-2 control-label">ID</label>
+              <div class="col-lg-7">
+                <input type="text" class="form-control" id="login-id">
+              </div>
+              <label for="login-id" id="login-id-hint" class="col-lg-3"></label>
+            </div>
+            <div class="form-group">
+              <label for="login-password" class="col-lg-2 control-label">密码</label>
+              <div class="col-lg-7">
+                <input type="password" class="form-control" id="login-password">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-lg-offset-2 col-lg-7">
+                <button type="submit" id="login-submit" class="btn btn-primary btn-block">登录</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="jumbotron" id="div-logup" style="display:none;">
+      <div class="row">
+        <div class="col-md-12">
+          <form id="logup-form" class="form-horizontal" role="form">
+            <div class="form-group">
+              <label for="logup-id" class="col-lg-2 control-label">ID</label>
+              <div class="col-lg-7">
+                <input type="text" class="form-control" id="logup-id">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="logup-password" class="col-lg-2 control-label">密码</label>
+              <div class="col-lg-7">
+                <input type="password" class="form-control" id="logup-password">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="logup-confirm-password" class="col-lg-2 control-label">确认密码</label>
+              <div class="col-lg-7">
+                <input type="password" class="form-control" id="logup-confirm-password">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="logup-username" class="col-lg-2 control-label">用户名</label>
+              <div class="col-lg-7">
+                <input type="text" class="form-control" id="logup-username">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="logup-male" class="col-lg-2 control-label">性别</label>
+              <div class="col-lg-7">
+                <label class="radio" for="logup-male" >
+                  <input type="radio" name="logup-gender" id="logup-male" value="男" required>
+                  男
+                </label>
+                <label class="radio" for="logup-female">
+                  <input type="radio" name="logup-gender" id="logup-female" value="女" required checked>
+                  女
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="logup-phone" class="col-lg-2 control-label">手机</label>
+              <div class="col-lg-7">
+                <input type="text" class="form-control" id="logup-phone">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-lg-offset-2 col-lg-7">
+                <button type="submit" id="logup-submit" class="btn btn-primary btn-block">注册</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
   <script src="/jquery/dist/jquery.js"></script>
-  <script src="/login.js"></script>
+  <script src="/flat-ui/dist/js/vendor/jquery.min.js"></script>
+  <script src="/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="/flat-ui/dist/js/flat-ui.min.js"></script>
+  <script src="/index.js"></script>
 </body>
 </html>
