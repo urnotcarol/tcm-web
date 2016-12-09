@@ -50,22 +50,54 @@ $(function() {
   $("#submit-add").on("click", function() {
     var selectedSymptomId = [];
     var newSymptom = [];
-    $("#tags-selected").tagsinput('items').forEach(function(elem) {
+    var isNewResult = true;
+    var result;
+
+    $("#tags-selected").tagsinput("items").forEach(function(elem) {
       var isNewSymptom = true;
       $("#symptoms button").each(function() {
-        if ($(this).html() === elem) {
+        if($(this).html() === elem) {
           isNewSymptom = false;
           selectedSymptomId.push($(this).data("symptom-id"));
           return false;
         }
       });
-
       if(isNewSymptom) {
         newSymptom.push(elem);
       }
     });
 
-    console.log(selectedSymptomId, newSymptom);
+    var tempResult = $("tags-result").tagsinput("items")[0];
+    $("#results button").each(function() {
+      if ($(this).html() === tempResult) {
+        isNewResult = false;
+        result = $(this).data("result-id");
+        return false;
+      }
+    });
+
+    if(isNewResult) {
+      result = tempResult;
+    }
+
+    console.log(selectedSymptomId, newSymptom, isNewResult, newResult);
+
+
+    $.ajax({
+      type: "POST",
+      url: "instance/add/addInstance",
+      data: {
+        "userId": "hahaha",
+        "selectedSymptomId": selectedSymptomId,
+        "newSymptom": newSymptom,
+        "isNewResult": isNewResult,
+        "result": result
+      },
+      success: function(result) {
+        alert("添加成功!");
+        location.reload();
+      }
+    })
   });
 
   $("#submit-reset").on("click", function() {       //单击重置按钮时隐藏诊断结果、清空已选症状并恢复症状按钮
