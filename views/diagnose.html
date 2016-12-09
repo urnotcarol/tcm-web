@@ -7,6 +7,7 @@
   <link href="flat-ui/dist/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="flat-ui/dist/css/flat-ui.css" rel="stylesheet">
   <link href="css/diagnose.css" rel="stylesheet">
+  <link href="css/buttons.css" rel="stylesheet">
 </head>
 <body>
   <div class="navbar navbar-default navbar-static-top" role="navigation">     <!-- 登录后的导航栏 -->
@@ -39,15 +40,6 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-md-7">
-        <div class="jumbotron">
-          <div class="row">
-            <div class="col-md-12" id="symptoms">
-              <h4 class="headline-symptom">选择症状</h4>
-            </div>
-          </div>
-        </div>
-      </div>
       <div class="col-md-5">
         <div class="jumbotron">
           <div class="row">
@@ -57,10 +49,10 @@
                 <input id="tags-selected" type="text" class="tagsinput input-lg" value="">
               </div>
               <div>
-                <button type="submit" id="submit-selected" class="btn btn-primary btn-block">诊断</button>
+                <button type="submit" id="submit-diagnose" class="btn button-pill btn-sm btn-primary btn-block">诊断</button>
               </div>
               <div>
-                <button type="submit" id="submit-reset" class="btn btn-warning btn-block">重置</button>
+                <button type="submit" id="submit-reset" class="btn button-pill btn-sm btn-warning btn-block">重置</button>
               </div>
               <div id="div-result" style="display:none;">
                 <h4 class="headline-result">诊断结果</h4>
@@ -73,16 +65,21 @@
             </div>
           </div>
         </div>
-
+      </div>
+      <div class="col-md-7">
+        <div class="jumbotron">
+          <div class="row">
+            <div class="col-md-12" id="symptoms">
+              <h4 class="headline-symptom">选择症状</h4>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <script src="/jquery/dist/jquery.js"></script>
   <script src="/flat-ui/dist/js/vendor/jquery.min.js"></script>
   <script src="/typeahead.js/dist/typeahead.bundle.js"></script>
   <script src="/flat-ui/dist/js/flat-ui.min.js"></script>
-  <script src="flat-ui/docs/assets/js/application.js"></script>
-  <script src="/typeahead.js/dist/bloodhound.js"></script>
-  <script src="/diagnose.js"></script>
+  <script src="/js/diagnose.js"></script>
 </body>
 </html>

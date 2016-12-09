@@ -1,0 +1,57 @@
+body {
+  padding-bottom: 200px;
+}
+
+.navbar-static-top {
+  margin-bottom: 19px;
+}
+
+.jumbotron {
+  background-color: #ECF0F1;
+}
+
+.headline-instance {
+  color: #1ABC9C;
+  font: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  margin-bottom: 15px;
+  padding: 0px 0;
+  /*text-align: center;*/
+  word-wrap: break-word;
+  margin-top: 2px;
+}
+
+.table>thead>tr>th, .table>tbody>tr>td {
+  vertical-align: middle;
+}
+
+#change-instance, #delete-instance {
+  text-align: left;
+}
+
+#submit-reset, #submit-add {
+  margin: 18px 0 18px 0;
+}
+
+#symptoms button, #results button {  /*设置症状button的上右下左外边距*/
+  margin: 4px 4px 4px 4px;
+}
+
+.headline-symptom {
+  color: #2980B9;
+  font: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  margin-bottom: 15px;
+  padding: 0px 0;
+  /*text-align: center;*/
+  word-wrap: break-word;
+  margin-top: 2px;
+}
+
+.headline-selected {
+  color: #1ABC9C;
+  font: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  margin-bottom: 15px;
+  padding: 0px 0;
+  /*text-align: center;*/
+  word-wrap: break-word;
+  margin-top: 2px;
+}

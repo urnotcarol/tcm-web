@@ -8,7 +8,7 @@ app.use(express.static("public/"));
 
 app.use("/", require("./routes/index.js"));
 app.use("/diagnose", require("./routes/diagnose.js"));
-//app.use("/instance", require("./routes/instance.js"));
+app.use("/instance", require("./routes/instance.js"));
 
 var server = app.listen(3000, function() {
   var host = server.address().address;
