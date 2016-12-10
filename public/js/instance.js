@@ -49,7 +49,7 @@ $(function() {
 
   $("#submit-add").on("click", function() {
     var selectedSymptomId = [];
-    var newSymptom = [];
+    var newSymptom = new Array();
     var isNewResult = true;
     var result;
 
@@ -67,7 +67,7 @@ $(function() {
       }
     });
 
-    var tempResult = $("tags-result").tagsinput("items")[0];
+    var tempResult = $("#tags-result").tagsinput("items")[0];
     $("#results button").each(function() {
       if ($(this).html() === tempResult) {
         isNewResult = false;
@@ -80,20 +80,20 @@ $(function() {
       result = tempResult;
     }
 
-    console.log(selectedSymptomId, newSymptom, isNewResult, newResult);
-
-
     $.ajax({
       type: "POST",
-      url: "instance/add/addInstance",
+      url: "/instance/add/addInstance",
       data: {
         "userId": "hahaha",
         "selectedSymptomId": selectedSymptomId,
         "newSymptom": newSymptom,
         "isNewResult": isNewResult,
-        "result": result
+        "result": result,
+        "instanceDetail": $("#instance-detail").val()
       },
       success: function(result) {
+        console.log("gdfgdfgd");
+        console.log(result);
         alert("添加成功!");
         location.reload();
       }
