@@ -31,7 +31,6 @@ exports.getResults = function(req, res){
 			throw err;
 		}
 		else{
-      db.connectDB.end();
 			res.send(result);
 		}
 	});
