@@ -1,4 +1,5 @@
 var db = require("./databaseConnector.js");
+db.connectDB.connect();
 
 exports.displayPage = function(req, res) {
   res.sendfile("views/instance.html");
@@ -15,10 +16,6 @@ exports.addInstance = function(req, res){
 	var result = req.body.result;
 	var instanceDetail = req.body.instanceDetail;
 
-
-	var isResultReady = false;
-	var isSymptomReady = false;
-
 	var resultInfo = "";//以后再说
 	var symptomInfo = "";//以后再说
 
@@ -34,13 +31,10 @@ exports.addInstance = function(req, res){
 				if(insertResult.affectedRows === 1){
 					//insert new result done
 					result = insertResult.insertId;
-					isResultReady = true;
 				}
 			}
 		});
-	} else {
-    isResultReady = true;
-  }
+	}
 
 	//if there is new symptom, insert it
   var insertInstance = function() {
@@ -91,5 +85,7 @@ exports.addInstance = function(req, res){
 				}
 			});
 		}
-	}
+	} else {
+    insertInstance();
+  }
 }

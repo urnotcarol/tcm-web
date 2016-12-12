@@ -9,3 +9,13 @@ body {
 .jumbotron {
   background-color: #ECF0F1;
 }
+
+#login-id-hint, #login-password-hint {
+  font: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: small;
+  margin-bottom: 15px;
+  padding: 0px 0px 0px 0px;
+  text-align: left;
+  word-wrap: break-word;
+  margin-top: 2px;
+}

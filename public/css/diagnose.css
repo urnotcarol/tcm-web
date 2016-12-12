@@ -48,6 +48,10 @@ body {
   margin-top: 2px;
 }
 
+.text-result {
+  font: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
 #div-result {
   margin-top: 50px;
 }

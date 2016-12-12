@@ -5,5 +5,6 @@ var router = express.Router();
 
 router.get("/", diagnose.displayPage);
 router.post("/getSymptoms", feature.getSymptoms);
+router.post("/submit", diagnose.diagnose)
 
 module.exports = router;

@@ -4,6 +4,18 @@ $(function() {
     location.href = "#add";
   })
 
+  // $.ajax({
+  //   type: "POST",
+  //   url: "/instance/showMyInstance,"
+  //   data: {
+  //     userId: "hahaha"
+  //   },
+  //   success: function(result) {
+  //
+  //
+  //   }
+  // })
+
   $.ajax({
     type: "POST",
     url: "/instance/add/getSymptoms",
@@ -49,7 +61,7 @@ $(function() {
 
   $("#submit-add").on("click", function() {
     var selectedSymptomId = [];
-    var newSymptom = new Array();
+    var newSymptom = [];
     var isNewResult = true;
     var result;
 
@@ -92,13 +104,15 @@ $(function() {
         "instanceDetail": $("#instance-detail").val()
       },
       success: function(result) {
-        console.log("gdfgdfgd");
-        console.log(result);
-        alert("添加成功!");
-        location.reload();
+        // if(result.status === "0") {
+          alert("添加成功!");
+          location.reload();
+        // }
       }
     })
   });
+
+
 
   $("#submit-reset").on("click", function() {       //单击重置按钮时隐藏诊断结果、清空已选症状并恢复症状按钮
     $("#tags-selected, #tags-result").tagsinput("removeAll");
