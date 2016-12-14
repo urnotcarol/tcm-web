@@ -4,23 +4,22 @@ $(function() {
     location.href = "#add";
   })
 
-  // $.ajax({
-  //   type: "POST",
-  //   url: "/instance/showMyInstance,"
-  //   data: {
-  //     userId: "hahaha"
-  //   },
-  //   success: function(result) {
-  //
-  //
-  //   }
-  // })
+  $.ajax({
+    type: "POST",
+    url: "/instance/getInstance",
+    data: {
+      userId: "8848dbl"
+    },
+    success: function(result) {
+      console.log(result);
+    }
+  })
 
   $.ajax({
     type: "POST",
     url: "/instance/add/getSymptoms",
     data: {
-      userId: "hahaha"
+      userId: "8848dbl"
     },
     success: function(symptoms) {
       symptoms.forEach(function(elem) {
@@ -38,7 +37,7 @@ $(function() {
     type: "POST",
     url: "/instance/add/getResults",
     data: {
-      userId: "hahaha"
+      userId: "8848dbl"
     },
     success: function(results) {
       results.forEach(function(elem) {
@@ -96,7 +95,7 @@ $(function() {
       type: "POST",
       url: "/instance/add/addInstance",
       data: {
-        "userId": "hahaha",
+        "userId": "8848dbl",
         "selectedSymptomId": selectedSymptomId,
         "newSymptom": newSymptom,
         "isNewResult": isNewResult,
@@ -125,6 +124,14 @@ $(function() {
 
   $("#tags-result").tagsinput({
     maxTags: 1
+  });
+
+  $("#tags-selected").on("itemAdded", function(event) {
+    $("#symptoms button").each(function() {
+      if($(this).html() === event.item) {
+        $(this).attr("disabled", "disabled");
+      }
+    });
   });
 
   $("#tags-result").on("itemAdded", function(event) {

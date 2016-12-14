@@ -3,7 +3,7 @@ $(function() {
     type: "POST",
     url: "/diagnose/getSymptoms",
     data: {
-      userId: "hahaha"
+      userId: "8848dbl"
     },
     success: function(symptoms) {
       symptoms.forEach(function(elem) {
@@ -51,7 +51,7 @@ $(function() {
           type: "POST",
           url: "diagnose/submit",
           data: {
-            userId: "hahaha",
+            userId: "8848dbl",
             selectedSymptomId: selectedSymptomId
           },
           success: function(result) {

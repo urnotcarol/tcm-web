@@ -22,15 +22,15 @@ exports.diagnose = function(req, res){
 								"SELECT id resultid, "
 								+ "ltrim"
 								+ "(cast("
-								+ "(SELECT COUNT(*) FROM instance, instance_symptom "
+								+ "((SELECT COUNT(*) FROM instance, instance_symptom "
 								+ "WHERE instance.id = instance_symptom.instance_id "
 								+ "AND instance.result_id = resultid "
 								+ "AND instance_symptom.symptom_id = ? "
-								+ "AND instance.user_id = ?) "
+								+ "AND instance.user_id = ?) + 1) "
 								+ "*1.0/"
-								+ "(SELECT COUNT(*) FROM instance "
+								+ "((SELECT COUNT(*) FROM instance "
 								+ "WHERE instance.result_id = resultid "
-								+ "AND instance.user_id = ?) "
+								+ "AND instance.user_id = ?) + (SELECT COUNT(*) FROM result where user_id = ?))"
 								+ "as dec(18, 2)"
 								+ ")) "
 								+ "+ '%' as ratio "
@@ -86,7 +86,7 @@ exports.diagnose = function(req, res){
 			var symptomLength = symptomSet.length;//诊断症状总数
 			var n = symptomLength;//计数，为零时所有症状都已经正确计算
 			for(var i = 0; i < symptomLength; i++){
-				db.connectDB.query(posteriorProbabilitySQL, [symptomSet[i], userId, userId, userId], function(err, posteriorProbabilitySet){
+				db.connectDB.query(posteriorProbabilitySQL, [symptomSet[i], userId, userId, userId, userId], function(err, posteriorProbabilitySet){
 					if(err){
 						throw err;
 					}
