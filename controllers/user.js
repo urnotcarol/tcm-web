@@ -1,12 +1,13 @@
 var db = require("./databaseConnector.js");
 
 exports.login = function(req, res) {
-	var loginSQL = "SELECT * FROM users WHERE id = '" + req.body.userid + "' and password = '" + req.body.password + "';";
-	db.query(loginSQL, function(err, rows){
+	var loginSQL = "SELECT * FROM users WHERE id = '" + req.body.id + "' and password = '" + req.body.password + "';";
+	db.connectDB.query(loginSQL, function(err, rows){
 		if(err) {
 			throw err;
 		}
 		else {
+      console.log(rows.length === 1);
 			if(rows.length === 1) {
 				res.send({
 					//登录成功
@@ -24,15 +25,16 @@ exports.login = function(req, res) {
 }
 
 exports.logup = function(req, res) {
-	var logupQuerySQL= "SELECT * FROM users WHERE id = '" + req.body.username + "';";
+	var logupQuerySQL= "SELECT * FROM users WHERE id = '" + req.body.id + "';";
 	var logupInsertSQL = "INSERT INTO users " +
-		"(id, username, password, gender, phone, identity, info)" +
-		"VALUES (?, ?, ?, ?, ?, ?, ?)";
-	db.query(logupQuerySQL, function(err, rows) {
+		"(id, password, gender)" +
+		"VALUES (?, ?, ?)";
+	db.connectDB.query(logupQuerySQL, function(err, rows) {
 		if(err) {
 			throw err;
 		}
 		else {
+      console.log(rows);
 			if(rows.length === 1){
 				//用户已存在
 				res.send({
@@ -40,14 +42,13 @@ exports.logup = function(req, res) {
 				})
 			}
 			else {
-				db.query(logupInsertSQL,
-				[req.body.id, req.body.username, req.body.password, req.body.gender, req.body.phone, req.body, identity, req.body.info],
-				function(err){
+				db.connectDB.query(logupInsertSQL, [req.body.id, req.body.password, req.body.gender], function(err){
 					if(err) {
 						throw err;
 					}
 					else {
 						//注册成功
+            console.log("send 2000");
 						res.send({
 							status: 2000
 						})

@@ -8,5 +8,6 @@ router.post("/getInstance", instance.getInstance);
 router.post("/add/getSymptoms", feature.getSymptoms);
 router.post("/add/getResults", feature.getResults);
 router.post("/add/addInstance", instance.addInstance);
+router.delete("/delete", instance.deleteInstance);
 
 module.exports = router;

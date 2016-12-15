@@ -10,7 +10,7 @@ var db = require("./databaseConnector.js");
 //get symptoms
 exports.getSymptoms = function(req, res){
   var userId = req.body.userId;
-	var querySQL = "SELECT id, name FROM symptom WHERE user_id = ? OR user_id = ?;";
+	var querySQL = "SELECT id, name FROM symptom WHERE user_id = ? OR user_id = ? order by id asc;";
 	db.connectDB.query(querySQL, [userId, db.publicUserId],function(err,result){
 		if(err){
 			throw err;
@@ -25,7 +25,7 @@ exports.getSymptoms = function(req, res){
 //get results
 exports.getResults = function(req, res){
   var userId = req.body.userId;
-	var querySQL = "SELECT id, name FROM result WHERE user_id = ? OR user_id = ?";
+	var querySQL = "SELECT id, name FROM result WHERE user_id = ? OR user_id = ? order by id asc;";
 	db.connectDB.query(querySQL, [userId, db.publicUserId], function(err,result){
 		if(err){
 			throw err;

@@ -49,12 +49,35 @@ exports.getInstance = function(req, res){
 	});
 }
 
+exports.deleteInstance = function(req, res) {
+  var instanceId = req.body.instanceId;
+  var deleteSQL= "DELETE FROM instance, instance_symptom WHERE instance.id = ? and instance.id = instance_symptom.instance_id;";
+  db.connectDB.query("DELETE FROM instance_symptom WHERE instance_id = ?", [instanceId], function(err, row){
+    if(err){
+      throw err;
+    }
+    else{
+      db.connectDB.query("DELETE FROM instance WHERE id = ?", [instanceId], function(err, row2){
+        if(err){
+          throw err;
+        }
+        else{
+          res.send({
+            status:3000
+          });
+        }
+      });
+    }
+  });
+}
+
 exports.addInstance = function(req, res){
 	var userId = req.body.userId;
 	var symptomSet = req.body.selectedSymptomId;
   if(typeof(symptomSet) === "undefined") {
     symptomSet = [];
   }
+  console.log(req.body);
 	var newSymptom = req.body.newSymptom;
 	var isNewResult = req.body.isNewResult;
 	var result = req.body.result;
@@ -64,22 +87,6 @@ exports.addInstance = function(req, res){
 	var symptomInfo = "";//以后再说
 
 	//if the result is new, insert it into "result"
-	if(isNewResult === "true"){
-    console.log("begin newResult: ", result);
-		var insertResultSQL = "INSERT INTO result(name, user_id, info) VALUES (?, ?, ?);";
-		db.connectDB.query(insertResultSQL, [result, userId, resultInfo], function(err, insertResult){
-			if(err){
-				throw err;
-			}
-			else{
-        console.log("insertResult: ", insertResult);
-				if(insertResult.affectedRows === 1){
-					result = insertResult.insertId;
-          insertSymptom();
-				}
-			}
-		});
-	}
 
 	//if there is new symptom, insert it
   var insertInstance = function() {
@@ -134,5 +141,24 @@ exports.addInstance = function(req, res){
     } else {
       insertInstance();
     }
+  }
+
+  if(isNewResult === "true"){
+    console.log("begin newResult: ", result);
+    var insertResultSQL = "INSERT INTO result(name, user_id, info) VALUES (?, ?, ?);";
+    db.connectDB.query(insertResultSQL, [result, userId, resultInfo], function(err, insertResult){
+      if(err){
+        throw err;
+      }
+      else{
+        console.log("insertResult: ", insertResult);
+        if(insertResult.affectedRows === 1){
+          result = insertResult.insertId;
+          insertSymptom();
+        }
+      }
+    });
+  } else {
+    insertSymptom();
   }
 }

@@ -10,7 +10,7 @@ body {
   background-color: #ECF0F1;
 }
 
-#login-id-hint, #login-password-hint {
+.hint {
   font: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: small;
   margin-bottom: 15px;

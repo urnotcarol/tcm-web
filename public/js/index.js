@@ -1,38 +1,5 @@
-// $(function() {
-//   $('[data-toggle="radio"]').radiocheck();
-//   $("#login").on("click", function(evt) {
-//     evt.preventDefault();
-//     var userid = $("#userid").val();
-//     var password = $("#password").val();
-//
-//     if(userid.length === 0 || password.length === 0){
-//       $("#inputHint").html("用户名或密码不能为空呦~");
-//     }
-//     else if(userid.length < 6 || password.length < 6){
-//       $("#inputHint").html("用户名和密码不能少于6位");
-//     }
-//     else{
-//       $.ajax({
-//         type: "POST",
-//         url: "login",
-//         data: {
-//           userid: userid,
-//           password: password
-//         },
-//         success: function(result) {
-//           console.log(result);
-//           if(result.status === 1000) {
-//             location.href = "/diagnose";
-//           } else {
-//             $("#inputHint").html("密码错误");
-//           }
-//         }
-//       });
-//   }
-//   });
-// });
-
 $(function() {
+  location.href="#login";
   $("#nav-login").on("click", function() {
     $("#nav-login").attr("class", "active");
     $("#nav-logup").attr("class", "");
@@ -52,44 +19,143 @@ $(function() {
   var idHint = "请输入6-20位由字母或数字组成的ID";
   var invalidId = "ID输入有误，请重新输入";
   var passwordHint = "请输入6-20位密码";
-  var invalidPassword = "密码输入有误，请重新输入"
+  var invalidPassword = "密码输入有误，请重新输入";
+
+  var validLoginId = false;
+  var validLoginPassword = false;
+  var validLogupId = false;
+  var validLogupPassword = false;
+  var validConfirm = false;
 
 
-  $("#login-id").focus(function() {
-    $("#login-id-hint").html(idHint);
-    $("#login-id-hint").css("color", primaryColor);
+  $("#login-id, #logup-id").focus(function() {
+    $(this).parent().next().html(idHint);
+    $(this).parent().next().css("color", primaryColor);
   });
 
-  $("#login-id").blur(function() {
-    var id = $("#login-id").val();
-    console.log(id);
-    if(id.length <= 6 || id.length >= 20) {
-      $("#login-id-hint").html(invalidId);
-      $("#login-id-hint").css("color", warningColor);
-      $("#login-id-hint").parent().addClass("has-warning");
+  var hintInvalidId = function(that, info) {
+    that.parent().next().html(info);
+    that.parent().next().css("color", warningColor);
+    that.parent().addClass("has-warning");
+  }
+
+  var hintInvalidPassword = function(that) {
+    that.parent().next().html(invalidPassword);
+    that.parent().next().css("color", warningColor);
+    that.parent().addClass("has-warning");
+  }
+
+  var hintConfirm = function(that) {
+    that.parent().next().html("两次输入密码不一致，请确认您的密码");
+    that.parent().next().css("color", warningColor);
+    that.parent().addClass("has-warning");
+  }
+
+  $("#login-id, #logup-id").blur(function() {
+    var id = $(this).val();
+    if(id.length < 6 || id.length > 20 || id.replace(/\w/g, "").length > 0) {
+      hintInvalidId($(this), invalidId);
+    } else {
+      $(this).parent().next().empty();
+      $(this).parent().removeClass("has-warning");
+      $(this).attr("id") === "login-id" ? validLoginId = true : validLogupId = true;
     }
   });
 
-  $("#login-password").focus(function() {
-    $("#login-password-hint").html(passwordHint);
-    $("#login-password-hint").css("color", primaryColor);
+  $("#login-password, #logup-password").focus(function() {
+    $(this).parent().next().html(passwordHint);
+    $(this).parent().next().css("color", primaryColor);
   })
 
-  $("#login-password").blur(function() {
-    var password = $("#login-password").val();
-    if(password.length <= 6 || password.length >= 20) {
-      $("#login-password-hint").html(invalidPassword);
-      $("#login-password-hint").css("color", warningColor);
-      $("#login-password-hint").parent().addClass("has-warning");
+  $("#login-password, #logup-password").blur(function() {
+    var password = $(this).val();
+    if(password.length < 6 || password.length > 20) {
+      hintInvalidPassword($(this));
+    } else {
+      $(this).parent().next().empty();
+      $(this).parent().removeClass("has-warning");
+      $(this).attr("id") === "login-password" ? validLoginPassword = true : validLogupPassword = true;
     }
   });
 
-  $("#logup-submit").on("click", function() {
-    var id = $("#logup-id").val();
-    var password = $("#logup-password").val();
-    var confirmPassword = $("#logup-confirm-password").val();
-    var username = $("#logup-username").val();
-    var gender = $("input[name='logup-gender'][checked]").val();
-    var phone = $("#logup-phone").val();
+  $("#logup-confirm-password").focus(function() {
+    $(this).parent().next().html("请再输一遍您的密码");
+    $(this).parent().next().css("color", primaryColor);
+  });
+
+  $("#logup-confirm-password").blur(function() {
+    if($("#logup-password").val() !== $(this).val()) {
+      hintConfirm($(this));
+    } else {
+      $(this).parent().next().empty();
+      $(this).parent().removeClass("has-warning");
+      validConfirm = true;
+    }
+  });
+
+  $("#submit-login").on("click", function() {
+    if(validLoginId && validLoginPassword) {
+      $.ajax({
+        type: "POST",
+        url: "/login",
+        data: {
+          id: $("#login-id").val(),
+          password: $("#login-password").val()
+        },
+        success: function(result) {
+          console.log(result);
+          if (result.status === 1000) {
+            Cookies.set("id", $("#login-id").val(), {expires: 1, path: "/"});
+            Cookies.set("password", $("#login-password").val() , {expires: 1, path: "/"});
+            location.href = "/diagnose"
+          } else if (result.status === 1001) {
+            $("#login-password").focus();
+            hintInvalidPassword($("#login-password"));
+          }
+        }
+      });
+    } else if(!validLoginId) {
+      $("#login-id").focus();
+      hintInvalidId($("#login-id"), invalidId);
+    } else if(!validLoginPassword) {
+      $("#login-password").focus();
+      hintInvalidPassword($("#login-password"));
+    } else{
+      console.log("unknown");
+    }
+  })
+
+  $("#submit-logup").on("click", function() {
+    if(validLogupId && validLogupPassword && validConfirm) {
+      $.ajax({
+        type: "POST",
+        url: "/logup",
+        data: {
+          id: $("#logup-id").val(),
+          password: $("#logup-password").val(),
+          gender: $("input:radio[name='logup-gender']:checked").val()
+        },
+        success: function(result) {
+          console.log(result);
+          if (result.status === 2000) {
+            Cookies.set("id", $("#logup-id").val(), {expires: 1, path: "/"});
+            Cookies.set("password", $("#logup-password").val(), {expires: 1, path: "/"});
+            location.href = "/diagnose"
+          } else if(result.status === 2001) {
+            $("#logup-id").focus();
+            hintInvalidId($("#logup-id"), "该ID已被注册，重新想一个吧^ ^");
+          }
+        }
+      })
+    } else if(!validLogupId) {
+      $("#logup-id").focus();
+      hintInvalidId($("#logup-id"), invalidId);
+    } else if(!validLogupPassword) {
+      $("#logup-password").focus();
+      hintInvalidPassword($("#logup-password"));
+    } else if(!validConfirm) {
+      $("#logup-confirm-password").focus();
+      hintConfirm($("#logup-confirm-password"));
+    }
   })
 })

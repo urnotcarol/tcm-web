@@ -10,13 +10,15 @@ exports.diagnose = function(req, res){
     symptomSet.push(parseInt(req.body.selectedSymptomId[i], 10));
   }
 	var userId = req.body.userId;
+  console.log("new diagnose from: ", userId);
 	var result = [];
 	var priorSQL =
 					"select result.id as id, "
-					+"ltrim(cast(count(result_id)*1.0/(select count(*) from instance) as dec(18, 2)))"
+					+"ltrim(cast(count(result_id)*1.0/(select count(*) from instance WHERE user_id = ? OR user_id = ?) as dec(18, 2)))"
 					+" + '%' as ratio "
-					+"from result left join instance on result.id = instance.result_id AND result.user_id = ? "
-					+"group by result_id,result.id "
+					+"from result left join instance on result.id = instance.result_id and (instance.user_id = ? or instance.user_id = ?)"
+          +"where result.user_id = ? or result.user_id = ? "
+					+"group by result_id, result.id "
 					+"ORDER BY result.id ASC;";
 	var posteriorProbabilitySQL =
 								"SELECT id resultid, "
@@ -26,16 +28,16 @@ exports.diagnose = function(req, res){
 								+ "WHERE instance.id = instance_symptom.instance_id "
 								+ "AND instance.result_id = resultid "
 								+ "AND instance_symptom.symptom_id = ? "
-								+ "AND instance.user_id = ?) + 1) "
+								+ "AND (instance.user_id = ? or instance.user_id = ?)) + 1) "
 								+ "*1.0/"
 								+ "((SELECT COUNT(*) FROM instance "
 								+ "WHERE instance.result_id = resultid "
-								+ "AND instance.user_id = ?) + (SELECT COUNT(*) FROM result where user_id = ?))"
+								+ "AND (instance.user_id = ? or instance.user_id = ?)) + (SELECT COUNT(*) FROM result where user_id = ? or user_id = ?))"
 								+ "as dec(18, 2)"
 								+ ")) "
 								+ "+ '%' as ratio "
 								+ "FROM result "
-								+ "WHERE user_id = ? "
+								+ "WHERE user_id = ? or user_id = ?"
 								+ "ORDER BY id ASC;";
 	var queryResultSQL = "SELECT name, info FROM result WHERE id = ?;";
 
@@ -45,6 +47,7 @@ exports.diagnose = function(req, res){
 			//在labelProbabilitySet里寻找概率最大的前n项
 			var n = 3;//返回概率最大结果的个数
 			var a = 0;
+
       labelProbabilitySet.sort(function(x, y) {
         if(x.ratio > y.ratio) {
           return -1;
@@ -52,7 +55,7 @@ exports.diagnose = function(req, res){
           return 1;
         }
       })
-
+      console.log("labelProbabilitySet: ", labelProbabilitySet);
 			for(var i = 0; i < n; i++){
 				result[i] = {};
 				result[i].id = labelProbabilitySet[i].id;
@@ -65,7 +68,7 @@ exports.diagnose = function(req, res){
 						result[a].name = labelResult[0].name;
 						result[a].info = labelResult[0].info;
             if (a++ === n - 1){
-              console.log("排序结果:::", result);
+              //console.log("排序结果:::", result);
               res.send(result);
               //return result;
     				}
@@ -74,24 +77,26 @@ exports.diagnose = function(req, res){
 			}
 	}
 
-	db.connectDB.query(priorSQL, [userId], function(err, priorProbabilitySet){
+	db.connectDB.query(priorSQL, [userId, db.publicUserId, userId, db.publicUserId, userId, db.publicUserId], function(err, priorProbabilitySet){
 		if(err){
 			throw err;
 		}
 		else{
+      // for(var i = 0; i< priorProbabilitySet.length; i++){
+      //   priorProbabilitySet[i].ratio = 1;
+      // }
 			labelProbabilitySet = priorProbabilitySet;//复制结果集，在后面多次相乘之后得到总概率
 			var labelLength = labelProbabilitySet.length;//结果个数
-      console.log("先验概率:\n", labelProbabilitySet);
+      console.log("先验概率:\n", labelProbabilitySet, "\n先验概率完毕");
 			//针对每一个症状计算所有label的后验概率posteriorProbability
 			var symptomLength = symptomSet.length;//诊断症状总数
 			var n = symptomLength;//计数，为零时所有症状都已经正确计算
 			for(var i = 0; i < symptomLength; i++){
-				db.connectDB.query(posteriorProbabilitySQL, [symptomSet[i], userId, userId, userId, userId], function(err, posteriorProbabilitySet){
+				db.connectDB.query(posteriorProbabilitySQL, [symptomSet[i], userId, db.publicUserId, userId, db.publicUserId, userId, db.publicUserId, userId, db.publicUserId], function(err, posteriorProbabilitySet){
 					if(err){
 						throw err;
 					}
 					else{
-            //console.log(posteriorProbabilitySet);
             labelProbabilitySet.sort(function(x, y) {
               if(x.id < y.id) {
                 return -1;
@@ -101,9 +106,10 @@ exports.diagnose = function(req, res){
             })
 						//针对每一个label结算该症状的后验概率
 						for(var j = 0; j < labelLength; j++) {
-							if(labelProbabilitySet[j].id == posteriorProbabilitySet[j].resultid){
-                //console.log("结果:", labelProbabilitySet[j].id);
-                //console.log("原概率:", labelProbabilitySet[j].ratio,  "乘:",posteriorProbabilitySet[j].ratio);
+              //console.log("j: ", j, "posteriorProbabilitySet[j]: ", posteriorProbabilitySet[j]);
+              if(labelProbabilitySet[j].id == posteriorProbabilitySet[j].resultid){
+                // console.log(j,"结果:", labelProbabilitySet[j].id);
+                // console.log(j,"原概率:", labelProbabilitySet[j].ratio,  "乘:",posteriorProbabilitySet[j].ratio);
 								labelProbabilitySet[j].ratio *= posteriorProbabilitySet[j].ratio;
 							}
 							else{
@@ -112,8 +118,9 @@ exports.diagnose = function(req, res){
 							}
 						}
             if(--n === 0){
-              console.log("done.");
-              console.log("label:::", labelProbabilitySet);
+              //console.log("done.");
+              //console.log("label:::", labelProbabilitySet);
+
               findMaxLabel();
               //console.log("finalRes: ", finalRes);
               //res.send(finalRes);
